@@ -160,6 +160,6 @@ class YoutubeService:
         return response
 
     def playlist_clear(self, playlistID):
-        items = self.get_playlist_response(playlistID)
-        for i in range(len(items)):
+        response = self.get_playlist_response(playlistID)
+        for i in range(len(response['items'])):
             self.playlist_delete_video(playlistID, 0)
