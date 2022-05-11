@@ -1,26 +1,16 @@
 from youtubeService import YoutubeService
 import re
-
+import json
 # https://www.youtube.com/channel/UCiFRmRKUf8yepwXD9R5m4uA
 # https://www.youtube.com/playlist?list=PL94KgMwB4qGj8Tlu_hVY0e9eyaNnmysH1
 def main():
-    yt = YoutubeService()
-    myChannelID = ""
-    myplaylistID = ""
-    s = input("input playlist link: ")
+    # yt = YoutubeService()
+    with open('listlink.json', newline='') as jsonfile:
+        data = json.load(jsonfile)
 
-    s = "https://www.youtube.com/playlist?list=PL94KgMwB4qGj8Tlu_hVY0e9eyaNnmysH1"
-
-    s = s.split('=')
-    print(s)
-    myplaylistID = s[1]
+    myChannelID = data["channel"].split('channel/')[1]
+    myplaylistID = data["playlist"].split('=')[1]
     print(myplaylistID)
-    s = input("input channel link: ")
-
-    s = "https://www.youtube.com/channel/UCiFRmRKUf8yepwXD9R5m4uA"
-
-    s = s.split('channel/')
-    myChannelID = s[1]
     print(myChannelID)
 
 

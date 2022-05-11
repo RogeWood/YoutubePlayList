@@ -42,7 +42,7 @@ class YoutubeService:
         response = request.execute()
         return response
 
-    def get_playlist_respone(self, playlistID): # 取得播放清單request
+    def get_playlist_response(self, playlistID): # 取得播放清單request
         request = self.youtube.playlistItems().list(
             part = "snippet",
             playlistId= playlistID ,
@@ -52,7 +52,7 @@ class YoutubeService:
         return response
 
     def playlist_show(self, playlistID): # 顯示播放清單內容
-        response = self.get_playlist_respone(playlistID)
+        response = self.get_playlist_response(playlistID)
 
         print("---------")
         for i in range(len(response['items'])):
@@ -62,7 +62,7 @@ class YoutubeService:
 
     def playlist_insert_video(self, playlistID, videoID, index = -1): # 插入影片
         if index < 0: # 如果沒有選取插入 index 自動加在最尾端
-            response = self.get_playlist_respone(playlistID)
+            response = self.get_playlist_response(playlistID)
             index = len(response['items'])
 
         request = self.youtube.playlistItems().insert(
@@ -84,7 +84,7 @@ class YoutubeService:
         return response
 
     def playlist_delete_video(self, playlistID, videoIndex): # 刪除影片
-        response = self.get_playlist_respone(playlistID)
+        response = self.get_playlist_response(playlistID)
         if videoIndex >= len(response["items"]):
             print("index out of length!")
             return
@@ -94,7 +94,7 @@ class YoutubeService:
         return response
 
     def playlist_search_video(self, playlistID, keyString): # 搜尋影片
-        response = self.get_playlist_respone(playlistID)
+        response = self.get_playlist_response(playlistID)
 
         findVideo = [] # 以找到的影片
         for i in range(len(response["items"])):
@@ -117,7 +117,7 @@ class YoutubeService:
         return
 
     def playlist_move_video(self, playlistID, currentIndex, moveIndex): # 移動影片順序
-        response = self.get_playlist_respone(playlistID)
+        response = self.get_playlist_response(playlistID)
 
         listlength = len(response['items'])
         # 索引號錯誤
@@ -137,8 +137,8 @@ class YoutubeService:
         return response
 
     def playlist_mergeList(self, myplaylistID, sourcePlaylistID): # 合併播放清單
-        mylistrespone = self.get_playlist_respone(myplaylistID)
-        sourcelistrespone = self.get_playlist_respone(sourcePlaylistID)
+        mylistrespone = self.get_playlist_response(myplaylistID)
+        sourcelistrespone = self.get_playlist_response(sourcePlaylistID)
 
         for item in sourcelistrespone['items']:
             self.playlist_insert_video(myplaylistID, item['snippet']['resourceId']['videoId'])
@@ -146,7 +146,20 @@ class YoutubeService:
         print("-------\nmerge finish\n-------")
         return
 
-    def playlist_move_to_other_playlise(self, myPlaylistID, targetPlaylistID, videoIndex): #搬移影片
+    def playlist_modify_title(self, myPlaylistID, title):
+        request = self.youtube.playlists().update(
+            part = "snippet",
+            body = {
+                "id": myPlaylistID,
+                "snippet": {
+                    "title": title,
+                }
+            }
+        )
+        response = request.execute()
+        return response
 
-        self.playlist_insert_video(targetPlaylistID, videoID)
-        self.playlist_delete_video(myPlaylistID, videoIndex)
+    def playlist_clear(self, playlistID):
+        items = self.get_playlist_response(playlistID)
+        for i in range(len(items)):
+            self.playlist_delete_video(playlistID, 0)
