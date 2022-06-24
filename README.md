@@ -1,4 +1,5 @@
 # Youtube Playlist
+Programming Design homework 2
 
 ## Package
 - os
@@ -7,10 +8,3 @@
 - googleapiclient.errors
 - re
 - tkinter
-
-### pip install
-```
-pip install --upgrade google-api-python-client
-pip install --upgrade google-auth-oauthlib google-auth-httplib2
-pip install tkinter
-```
