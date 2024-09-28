@@ -36,3 +36,7 @@
 
 `change main pl` 更改主要播放清單  
 
+## Key 
+Path: `stander/client_secretexample.json`
+"client_id": "YOUR_CLIENT_ID_HERE"
+"client_secret": "YOUR_CLIENT_SECRET_HERE"
